@@ -1,0 +1,401 @@
+<!--
+===========================================
+文件名: courts.html
+作者: zjy
+功能: 场地看板页面 - 展示场地列表、推荐、预约弹窗
+===========================================
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>场地看板 - 体育馆预约系统</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: "Microsoft YaHei", sans-serif;
+            padding: 20px 0;
+        }
+        .recommend-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+        .recommend-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 15px;
+            color: #333;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+        }
+        .recommend-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .court-table {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .court-table thead th {
+            background: #667eea !important;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 14px 16px;
+        }
+        .court-table tbody td {
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
+        .court-table tbody tr {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .court-table tbody tr:hover {
+            background-color: #f0f5ff !important;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px 32px;
+            width: 90%;
+            max-width: 360px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .type-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            background-color: #e6f7ff;
+            color: #1890ff;
+            font-weight: 500;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 800px;">
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-3 mb-3 shadow-sm">
+            <div class="container-fluid">
+                <span class="navbar-brand fw-bold text-primary">🏟️ 体育馆预约</span>
+                <div class="d-flex flex-wrap align-items-center gap-2 gap-md-3">
+                    <span id="userText" class="text-muted"></span>
+                    <a href="my.html" class="btn btn-outline-primary btn-sm">我的预约</a>
+                    <button class="btn btn-outline-danger btn-sm" onclick="logout()">退出</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 推荐区域 -->
+        <div class="recommend-section" id="recommendSection">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span style="font-size: 18px; font-weight: bold;">⭐ 为您推荐</span>
+            </div>
+            <div id="recommendContent">
+                <div class="text-center py-4" style="color: rgba(255,255,255,0.9);">请先 <a href="login.html" style="color:#fff; text-decoration:underline;">登录</a> 查看个性化推荐</div>
+            </div>
+        </div>
+
+        <!-- 图例 -->
+        <div class="legend">
+            <div class="legend-item"><span class="badge bg-success">空闲</span></div>
+            <div class="legend-item"><span class="badge bg-warning text-dark">预约中</span></div>
+            <div class="legend-item"><span class="badge bg-danger">占用</span></div>
+            <div class="legend-item"><span class="badge bg-secondary">已超时</span></div>
+        </div>
+
+        <!-- 场地表格 -->
+        <div class="court-table table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>场地名称</th>
+                        <th>类型</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody id="courtTableBody">
+                    <tr><td colspan="3" class="text-center text-muted py-4">正在加载场地数据...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 预约弹窗 -->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal-box">
+            <h5 class="mb-3 fw-bold" id="modalTitle">预约场地</h5>
+            <div class="mb-3">
+                <label class="form-label text-muted" style="font-size:13px;">日期</label>
+                <input type="date" class="form-control" id="bookDate">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-muted" style="font-size:13px;">开始时间</label>
+                <input type="time" class="form-control" id="bookStart" value="18:00">
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-muted" style="font-size:13px;">结束时间</label>
+                <input type="time" class="form-control" id="bookEnd" value="20:00">
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary flex-fill" id="btnConfirm">确认预约</button>
+                <button class="btn btn-outline-secondary flex-fill" id="btnCancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var API_BASE = "http://192.168.1.35:5000";  // 手机访问时改成你的电脑IP，如 http://192.168.1.105:5000
+
+        var token = localStorage.getItem("token");
+        var userId = localStorage.getItem("user_id");
+        var userText = document.getElementById("userText");
+
+        if (!token) {
+            userText.innerHTML = "<a href='login.html'>请先登录</a>";
+        } else {
+            userText.textContent = "用户" + userId;
+            var role = localStorage.getItem("role");
+            if (role === '管理员') {
+                var navBar = document.querySelector('.navbar .d-flex');
+                var adminLink = document.createElement('a');
+                adminLink.href = 'admin.html';
+                adminLink.textContent = '管理员后台';
+                adminLink.className = 'btn btn-success btn-sm';
+                navBar.insertBefore(adminLink, navBar.children[1]);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user_id");
+            localStorage.removeItem("role");
+            window.location.href = "login.html";
+        }
+
+        function getToday() {
+            var d = new Date();
+            var year = d.getFullYear();
+            var month = (d.getMonth() + 1).toString().padStart(2, "0");
+            var day = d.getDate().toString().padStart(2, "0");
+            return year + "-" + month + "-" + day;
+        }
+
+        var modal = document.getElementById("bookModal");
+        var modalTitle = document.getElementById("modalTitle");
+        var bookDate = document.getElementById("bookDate");
+        var bookStart = document.getElementById("bookStart");
+        var bookEnd = document.getElementById("bookEnd");
+        var btnConfirm = document.getElementById("btnConfirm");
+        var btnCancel = document.getElementById("btnCancel");
+        var pendingCourtId = null;
+        var pendingCourtName = null;
+
+        bookDate.value = getToday();
+
+        btnCancel.addEventListener("click", function() {
+            modal.classList.remove("active");
+        });
+
+        btnConfirm.addEventListener("click", function() {
+            var date = bookDate.value;
+            var start = bookStart.value;
+            var end = bookEnd.value;
+
+            if (!date || !start || !end) {
+                alert("请填写完整时段信息");
+                return;
+            }
+            if (start >= end) {
+                alert("结束时间必须晚于开始时间");
+                return;
+            }
+
+            modal.classList.remove("active");
+            doBook(pendingCourtId, pendingCourtName, date, start, end);
+        });
+
+        function openBookModal(courtId, courtName) {
+            if (!token || !userId) {
+                window.location.href = "login.html";
+                return;
+            }
+            pendingCourtId = courtId;
+            pendingCourtName = courtName;
+            modalTitle.textContent = "预约「" + courtName + "」";
+            modal.classList.add("active");
+        }
+
+        function doBook(courtId, courtName, date, start, end) {
+            fetch(API_BASE + "/api/book", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: parseInt(userId),
+                    court_id: parseInt(courtId),
+                    date: date,
+                    start_time: start,
+                    end_time: end
+                })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(result) {
+                if (result.success) {
+                    alert("预约成功！");
+                    window.location.reload();
+                } else {
+                    alert("预约失败：" + result.msg);
+                }
+            })
+            .catch(function(err) {
+                alert("请求失败：" + err.message);
+            });
+        }
+
+        function loadRecommendations() {
+            if (!token || !userId) return;
+
+            fetch(API_BASE + "/api/recommend?user_id=" + userId)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var container = document.getElementById("recommendContent");
+                    var recData = data.data || data;
+                    if (!recData.recommendations || recData.recommendations.length === 0) {
+                        container.innerHTML = '<div class="text-center py-4" style="color:rgba(255,255,255,0.9);">暂无推荐，先去预约几个场地吧</div>';
+                        return;
+                    }
+
+                    if (recData.preferred_type === null) {
+                        container.innerHTML = '<div class="text-center py-4" style="color:rgba(255,255,255,0.9);">暂无有效历史记录，完成一次预约并使用后，将为您个性化推荐！</div>';
+                        return;
+                    }
+
+                    var cardsDiv = document.createElement("div");
+                    cardsDiv.className = "row g-3";
+
+                    for (var i = 0; i < Math.min(3, recData.recommendations.length); i++) {
+                        var rec = recData.recommendations[i];
+                        var col = document.createElement("div");
+                        col.className = "col-md-4";
+                        col.innerHTML =
+                            '<div class="recommend-card h-100">' +
+                            '<div class="fw-bold mb-1">' + rec.name + '</div>' +
+                            '<div class="text-muted mb-2" style="font-size:13px;">' + rec.type + ' | ' + rec.location + '</div>' +
+                            '<div class="text-primary fw-bold mb-1" style="font-size:13px;">匹配度: ' + rec.score + '分</div>' +
+                            '<div class="text-secondary" style="font-size:12px;">' + rec.reason + '</div>' +
+                            '</div>';
+
+                        (function(cid, cname) {
+                            col.querySelector('.recommend-card').addEventListener("click", function() {
+                                openBookModal(cid, cname);
+                            });
+                        })(rec.id, rec.name);
+
+                        cardsDiv.appendChild(col);
+                    }
+                    container.innerHTML = "";
+                    container.appendChild(cardsDiv);
+                })
+                .catch(function(e) {
+                    // 推荐加载失败，静默处理
+                });
+        }
+
+        var tbody = document.getElementById("courtTableBody");
+
+        function loadCourts() {
+            fetch(API_BASE + "/api/courts")
+                .then(function(response) {
+                    if (!response.ok) throw new Error("服务器返回错误：" + response.status);
+                    return response.json();
+                })
+                .then(function(data) {
+                    tbody.innerHTML = "";
+                    var courts = data.data || data;
+                    for (var i = 0; i < courts.length; i++) {
+                        var court = courts[i];
+                        var badgeClass = "bg-success";
+                        if (court.status === "预约中") badgeClass = "bg-warning text-dark";
+                        else if (court.status === "占用") badgeClass = "bg-danger";
+                        else if (court.status === "已超时") badgeClass = "bg-secondary";
+
+                        var tr = document.createElement("tr");
+                        tr.setAttribute("data-id", court.id);
+                        tr.setAttribute("data-name", court.name);
+                        tr.setAttribute("data-status", court.status);
+                        tr.innerHTML =
+                            '<td class="fw-medium">' + court.name + '</td>' +
+                            '<td><span class="type-tag">' + court.type + '</span></td>' +
+                            '<td><span class="badge ' + badgeClass + '">' + court.status + '</span></td>';
+
+                        tr.addEventListener("click", function() {
+                            var name = this.getAttribute("data-name");
+                            var status = this.getAttribute("data-status");
+                            var id = this.getAttribute("data-id");
+                            if (!token) { window.location.href = "login.html"; return; }
+                            if (status !== "空闲") { alert("场地「" + name + "」当前状态：" + status + "，不可预约"); return; }
+                            openBookModal(id, name);
+                        });
+                        tbody.appendChild(tr);
+                    }
+                })
+                .catch(function(error) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">连接后端失败<br>错误信息：' + error.message + '</td></tr>';
+                });
+        }
+
+        // 页面加载时拉取数据
+        loadCourts();
+        loadRecommendations();
+
+        // 切回页面时自动刷新（解决从 my.html 取消后状态不同步的问题）
+        document.addEventListener("visibilitychange", function() {
+            if (!document.hidden) {
+                loadCourts();
+                loadRecommendations();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+user_count,exhaustive_time,sa_time,exhaustive_optimal,sa_optimal
+5,0.1,0.1,100,100
+10,inf,0.3,100,90
+50,inf,0.8,100,88
