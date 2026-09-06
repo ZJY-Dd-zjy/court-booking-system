@@ -186,7 +186,7 @@
     </div>
 
     <script>
-        var API_BASE = "http://192.168.1.35:5000";  // 手机访问时改成你的电脑IP，如 http://192.168.1.105:5000
+        var API_BASE = window.location.origin;  // 自动获取当前IP和端口，无需手动修改"http://192.168.1.35:5000";  // 手机访问时改成你的电脑IP，如 http://192.168.1.105:5000
 
         var token = localStorage.getItem("token");
         var userId = localStorage.getItem("user_id");

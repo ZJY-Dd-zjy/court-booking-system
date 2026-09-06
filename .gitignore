@@ -1,4 +1,4 @@
-# Python
+# ==================== Python ====================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,19 +8,33 @@ env/
 venv/
 .venv/
 
-# 数据库（本地数据，不需要上传）
+# ==================== Database ====================
+# 本地数据库文件（数据环境相关，不上传）
 *.db
 *.sqlite
 *.sqlite3
 
-# IDE
+# ==================== IDE ====================
 .idea/
 .vscode/
 *.iml
 
-# 系统文件
+# ==================== OS ====================
 .DS_Store
 Thumbs.db
 
-# 日志
+# ==================== Logs ====================
 *.log
+logs/
+
+# ==================== Project Specific ====================
+# 归档历史文件
+archive/
+
+# 本地数据文件（mock数据较大，按需上传）
+data/*.json
+data/*.csv
+
+# 截图与视频（素材较大，按需上传）
+materials/screenshots/*.mp4
+materials/screenshots/*.mov

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>合作开发协议</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .page { page-break-after: always; }
+            .no-break { page-break-inside: avoid; }
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: "SimSun", "宋体", serif;
+            font-size: 14pt;
+            line-height: 1.8;
+            color: #000;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 25mm 30mm;
+        }
+        h1 {
+            text-align: center;
+            font-size: 22pt;
+            font-weight: bold;
+            margin-bottom: 30pt;
+            letter-spacing: 2pt;
+        }
+        .party {
+            margin-bottom: 15pt;
+        }
+        .party-line {
+            display: flex;
+            margin-bottom: 8pt;
+        }
+        .party-label {
+            width: 120pt;
+            flex-shrink: 0;
+        }
+        .party-value {
+            flex: 1;
+            border-bottom: 1px solid #000;
+            padding-left: 5pt;
+            min-height: 20pt;
+        }
+        .section {
+            margin-top: 20pt;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 8pt;
+        }
+        .indent {
+            text-indent: 2em;
+            margin-bottom: 8pt;
+            text-align: justify;
+        }
+        .no-indent {
+            margin-bottom: 8pt;
+            text-align: justify;
+        }
+        .sign-area {
+            margin-top: 40pt;
+            display: flex;
+            justify-content: space-between;
+        }
+        .sign-box {
+            width: 30%;
+            text-align: center;
+        }
+        .sign-line {
+            border-bottom: 1px solid #000;
+            height: 40pt;
+            margin-bottom: 5pt;
+        }
+        .sign-label {
+            font-size: 12pt;
+        }
+        .date-line {
+            margin-top: 10pt;
+            text-align: right;
+        }
+        .highlight {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .notice {
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            padding: 10pt;
+            margin: 15pt 0;
+            font-size: 12pt;
+            color: #d48806;
+        }
+        .page-number {
+            text-align: center;
+            margin-top: 30pt;
+            font-size: 12pt;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<h1>计算机软件合作开发协议</h1>
+
+<div class="party">
+    <div class="party-line">
+        <span class="party-label">甲方（开发人）：</span>
+        <span class="party-value">________________（身份证号：________________________）</span>
+    </div>
+    <div class="party-line">
+        <span class="party-label">乙方（开发人）：</span>
+        <span class="party-value">________________（身份证号：________________________）</span>
+    </div>
+    <div class="party-line">
+        <span class="party-label">丙方（开发人）：</span>
+        <span class="party-value">________________（身份证号：________________________）</span>
+    </div>
+</div>
+
+<div class="indent">
+鉴于甲、乙、丙三方共同参与《<span class="highlight">智能体育场馆预约与分配系统V1.0</span>》（以下简称"本软件"）的开发工作，为明确各方权利义务，经友好协商，达成如下协议：
+</div>
+
+<div class="section">
+    <div class="section-title">一、软件基本信息</div>
+    <div class="no-indent">1. 软件全称：智能体育场馆预约与分配系统</div>
+    <div class="no-indent">2. 软件简称：场馆预约系统</div>
+    <div class="no-indent">3. 版本号：V1.0</div>
+    <div class="no-indent">4. 开发完成日期：2026年8月</div>
+    <div class="no-indent">5. 开发环境：Python 3.10、Flask 2.3、SQLite 3、HTML5/CSS3/JavaScript、PyTorch</div>
+</div>
+
+<div class="section">
+    <div class="section-title">二、合作开发内容与分工</div>
+    <div class="no-indent">1. <strong>甲方</strong>负责：项目整体统筹、前端页面设计与开发、系统联调与测试、文档撰写与答辩材料准备。</div>
+    <div class="no-indent">2. <strong>乙方</strong>负责：后端API设计与开发、数据库设计与维护、服务器部署与接口联调。</div>
+    <div class="no-indent">3. <strong>丙方</strong>负责：智能匹配算法设计与实现（模拟退火算法、神经网络模型）、实验数据分析与参数调优。</div>
+</div>
+
+<div class="section">
+    <div class="section-title">三、著作权归属</div>
+    <div class="indent">本软件的著作权由甲、乙、丙三方共同享有，各方权利平等，任何一方所占著作权份额均为三分之一。任何一方未经其他两方书面同意，不得擅自转让、许可第三方使用或以其他方式处分本软件著作权。</div>
+</div>
+
+<div class="section">
+    <div class="section-title">四、权利行使</div>
+    <div class="no-indent">1. 各方均有权在本软件著作权范围内进行使用、复制、修改、发表。</div>
+    <div class="no-indent">2. 如需对外授权、转让本软件著作权，须经三方一致同意，并签署书面协议。</div>
+    <div class="no-indent">3. 因本软件产生的收益（包括但不限于许可费、转让费、奖金等），由三方平均分配。</div>
+</div>
+
+<div class="section">
+    <div class="section-title">五、保密义务</div>
+    <div class="indent">各方对合作开发过程中知悉的技术细节、源代码、算法参数、用户信息等负有保密义务，未经其他两方同意，不得向第三方披露。</div>
+</div>
+
+<div class="section">
+    <div class="section-title">六、争议解决</div>
+    <div class="indent">本协议履行过程中如发生争议，三方应友好协商解决；协商不成的，任何一方均可向甲方所在地人民法院提起诉讼。</div>
+</div>
+
+<div class="section">
+    <div class="section-title">七、其他</div>
+    <div class="no-indent">1. 本协议一式三份，甲、乙、丙三方各执一份，具有同等法律效力。</div>
+    <div class="no-indent">2. 本协议自三方签字（或盖章）之日起生效。</div>
+    <div class="no-indent">3. 本协议未尽事宜，三方可另行协商并签订补充协议，补充协议与本协议具有同等法律效力。</div>
+</div>
+
+<div class="sign-area">
+    <div class="sign-box no-break">
+        <div>甲方（签字）：</div>
+        <div class="sign-line"></div>
+        <div class="sign-label">日期：____年____月____日</div>
+    </div>
+    <div class="sign-box no-break">
+        <div>乙方（签字）：</div>
+        <div class="sign-line"></div>
+        <div class="sign-label">日期：____年____月____日</div>
+    </div>
+    <div class="sign-box no-break">
+        <div>丙方（签字）：</div>
+        <div class="sign-line"></div>
+        <div class="sign-label">日期：____年____月____日</div>
+    </div>
+</div>
+
+<div class="notice">
+    <strong>填写说明：</strong><br>
+    1. 请用黑色签字笔手写填写姓名和身份证号；<br>
+    2. 三方必须在签字栏<strong>手写签字</strong>，不可打印；<br>
+    3. 签字后用手机清晰拍照（四个角拍全）或扫描成PDF；<br>
+    4. 上传至软著申请系统"其他相关证明文件"栏。
+</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+# 体育馆智能预约系统 - Python 依赖
+# 安装命令: pip install -r requirements.txt
+
+# ===== Web 框架 =====
+Flask>=2.3.0
+flask-cors>=4.0.0
+
+# ===== 算法与数值计算 =====
+numpy>=1.24.0
+matplotlib>=3.7.0
+
+# ===== AI / 神经网络 =====
+torch>=2.0.0
+
+# ===== 数据生成（可选）=====
+# pandas>=2.0.0
+# openpyxl>=3.1.0
